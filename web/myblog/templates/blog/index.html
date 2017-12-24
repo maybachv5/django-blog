@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load blog_tags %}
+{% block main %}
+    <div class="am-u-md-8 am-u-sm-12">
+			  {% for article in article_list %}
+        <article class="am-g blog-entry-article">
+
+            <div class=" blog-entry-text">
+                <h1><a href="{{article.get_absolute_url}}">{{article.title}}</a></h1>
+                <span class="am-icon-archive " style="font-size:8px" title="分类"> &nbsp;</span ><span style="font-size:8px"><a> {{article.category}}</a></span> &nbsp;</a></span>
+				<span class="am-icon-user" style="font-size:8px" title="作者"> &nbsp;</span><span style="font-size:8px"><a> {{article.author}}</a></span> &nbsp;</a></span>
+				<span class="am-icon-calendar" style="font-size:8px" title="时间"> &nbsp;</span><span style="font-size:8px"><a>{{article.created_time.year}}/{{article.created_time.month}}/{{article.created_time.day}}</a></span> &nbsp;</a></span>
+                <span class="am-icon-eye" style="font-size:8px" title="阅读量"> &nbsp;</span><span style="font-size:8px"><a>{{ article.views }}</a></span> &nbsp;</a></span>
+                <span class="am-icon-comments" style="font-size:8px" title="评论数"> &nbsp;</span><span style="font-size:8px"><a>{{ article.comment_set.count }}</a></span> &nbsp;</a></span>
+                <p>{{article.abstract}}</p>
+                <a href="{{ article.get_absolute_url }}" class="more-link">继续阅读 <span class="meta-nav"></span></a>
+
+            </div>
+        </article>
+        {% empty %}
+            <div class="no-post">暂时还没有发布的文章！</div>
+        {% endfor %}
+        <ul class="am-pagination am-pagination-centered">
+          {% if is_paginated %}
+          {% if first %}
+            <li><a href="?page=1">1</a></li>
+          {% endif %}
+          {% if left %}
+            {% if left_has_more %}
+                <span>...</span>
+            {% endif %}
+            {% for i in left %}
+                <li><a href="?page={{ i }}">{{ i }}</a></li>
+            {% endfor %}
+          {% endif %}
+            <li class="am-active"><a href="?page={{ page_obj.number }}">{{ page_obj.number }}</a></li>
+          {% if right %}
+            {% for i in right %}
+                <li><a href="?page={{ i }}">{{ i }}</a></li>
+            {% endfor %}
+            {% if right_has_more %}
+              <span>...</span>
+            {% endif %}
+          {% endif %}
+          {% if last %}
+            <li><a href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a></li>
+          {% endif %}
+          {% endif %}
+        </ul>
+    </div>
+{% endblock main %}

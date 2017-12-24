@@ -1,0 +1,8 @@
+Django==1.10.6
+markdown
+uWSGI==2.0.13.1
+PyMySQL
+pytz
+whoosh 
+django-haystack 
+jieba

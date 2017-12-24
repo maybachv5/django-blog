@@ -1,0 +1,143 @@
+<!doctype html>
+{% load staticfiles %}
+{% load blog_tags %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>个人博客</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+  <link rel="icon" type="image/png" href="{% static '/blog/i/favicon.png' %}">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="icon" sizes="192x192" href="{% static '/blog/i/app-icon72x72@2x.png' %}">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
+  <link rel="apple-touch-icon-precomposed" href="{% static '/blog/i/app-icon72x72@2x.png' %}">
+  <meta name="msapplication-TileImage" content="{% static '/blog/i/app-icon72x72@2x.png' %}">
+  <meta name="msapplication-TileColor" content="#0e90d2">
+  <link rel="stylesheet" href="{% static '/blog/css/amazeui.min.css' %}">
+  <link rel="stylesheet" href="{% static '/blog/css/app.css' %}">
+    <title>Black &amp; White</title>
+    <style>
+        span.highlighted {
+            color: red;
+        }
+    </style>
+</head>
+<header class="am-topbar am-topbar-inverse">
+  <!--<h1 class="am-topbar-brand">-->
+    <!--<a href="{% url 'blog:index' %}">MAYBACH</a>-->
+  <!--</h1>-->
+
+  <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#doc-topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+
+  <div class="am-collapse am-topbar-collapse" id="doc-topbar-collapse">
+    <ul class="am-nav am-nav-pills am-topbar-nav">
+      <li class="am-active"><a href="{% url 'blog:index' %}">首页</a></li>
+      <li class="am-dropdown" data-am-dropdown>
+        <a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+          分类<span class="am-icon-caret-down"></span>
+        </a>
+        <ul class="am-dropdown-content">
+            {% get_category as get_category_list %}
+		    {% for category in get_category_list %}
+            <li><a href="{% url 'blog:category' category.pk %}">{{ category }}</a></li>
+            {% empty %}
+                暂无分类！
+            {% endfor %}
+        </ul>
+      </li>
+
+        <li class="am-dropdown" data-am-dropdown>
+        <a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+          归档<span class="am-icon-caret-down"></span>
+        </a>
+        <ul class="am-dropdown-content">
+        {% archives as date_list %}
+        {% for date in date_list %}
+        <li>
+            <a href="{% url 'blog:archives' date.year date.month %}">{{date.year}} 年 {{date.month}} 月</a>
+        </li>
+        {% empty %}
+            暂无归档！
+        {% endfor %}
+        </ul>
+      </li>
+    </ul>
+
+
+    <form class="am-topbar-form am-topbar-right am-form-inline" role="search" action="{% url 'haystack_search' %}">
+      <div class="am-form-group">
+        <input type="text" class="am-form-field am-input-sm"  name="q" placeholder="搜索" required>
+          <button type="submit" class="am-btn am-btn-primary">搜索</button>
+
+      </div>
+    </form>
+  </div>
+</header>
+<body id="blog">
+
+
+
+
+
+<!-- content srart -->
+<div class="am-g am-g-fixed blog-fixed">
+    {% block main %}
+    {% endblock main %}
+
+    <div class="am-u-md-4 am-u-sm-12 blog-sidebar">
+        <div class="blog-sidebar-widget blog-bor">
+            <h2 class="blog-text-center blog-title"><span>关于我</span></h2>
+            <img src="{% static '/blog/i/maybach.jpg' %}" alt="about me" class="blog-entry-img" >
+
+                        <p>MAYBACH</p>
+            <a href="https://github.com/maybachv5"><span class="am-icon-github am-icon-fw blog-icon"></span></a>
+
+            <a href="https://weibo.com/u/1766302390/home?wvr=5"><span class="am-icon-weibo am-icon-fw blog-icon"></span></a>
+      <p>You're Closer Than You Think!</p>
+
+        </div>
+
+        <div class="blog-clear-margin blog-sidebar-widget blog-bor am-g ">
+            <h2 class="blog-title"><span>标签云</span></h2>
+            <div class="am-u-sm-12 blog-clear-padding">{% get_tags as tag_list %}
+			{% for tag in tag_list %}
+            <a href="{% url 'blog:tag' tag.pk %}" class="blog-tag">{{tag}}({{tag.article_set.count}})</a>
+            {% empty %}
+				暂无标签！
+			{% endfor %}
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+<!-- content end -->
+
+
+ <footer class="blog-footer">
+
+    <div class="blog-text-center">© 2017 MAYBACH</div>
+  </footer>
+
+
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="{% static '/blog/js/jquery.min.js' %}"></script>
+<!--<![endif]-->
+<!--[if lte IE 8 ]>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+<script src="{% static '/blog/js/amazeui.min.js' %}"></script>
+<!-- <script src="assets/js/app.js"></script> -->
+</body>
+</html>

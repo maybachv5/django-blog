@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load blog_tags %}
+{% block main %}
+<div class="am-u-md-8 am-u-sm-12">
+      <article class="am-article blog-article-p">
+        <div class="am-article-hd">
+          <h1 class="am-article-title blog-text-center">{{article.title}}</h1>
+          <p class="am-article-meta blog-text-center">
+                <span class="am-icon-archive" title="分类"> &nbsp;</span><span><a> {{article.category}}</a></span> &nbsp;</a></span>
+				<span class="am-icon-user" title="作者"> &nbsp;</span><span><a> {{article.author}}</a></span> &nbsp;</a></span>
+				<span class="am-icon-calendar" title="时间"> &nbsp;</span><span><a>{{article.created_time.year}}/{{article.created_time.month}}/{{article.created_time.day}}</a></span> &nbsp;</a></span>
+                <span class="am-icon-eye" title="阅读量"> &nbsp;</span><span><a>{{ article.views }}</a></span> &nbsp;</a></span>
+                <span class="am-icon-comments" title="评论数"> &nbsp;</span><span><a>{{ article.comment_set.count }}</a></span> &nbsp;</a></span>
+          </p>
+        </div>
+        <div class="am-article-bd">
+         <p>{{article.body|safe}}</p>
+        </div>
+      </article>
+
+        <div class="am-g blog-article-widget blog-article-margin">
+          <div class="am-u-lg-4 am-u-md-5 am-u-sm-7 am-u-sm-centered blog-text-center">
+            <span class="am-icon-tags"> &nbsp;</span>
+             {% for tag in article.tags.all %}
+            <a href="{% url 'blog:tag' tag.pk %}">{{tag.name}}</a>
+             {% empty %}
+                暂无标签！
+             {% endfor %}
+            <hr>
+          </div>
+        </div>
+
+        <!--<hr>-->
+        <!--<div class="am-g blog-author blog-article-margin">-->
+          <!--{% for comment in comment_list %}-->
+          <!--<div class="am-u-sm-3 am-u-md-3 am-u-lg-2">-->
+            <!--<img src="{% static '/blog/i/f15.jpg' %}" alt="" class="blog-author-img am-circle">-->
+          <!--</div>-->
+          <!--<div class="am-u-sm-9 am-u-md-9 am-u-lg-10">-->
+          <!--<h3><span>评论信息：</span><span class="blog-color">{{ comment.name }}({{ comment.create_time }})</span></h3>-->
+            <!--<p>{{comment.text}}</p>-->
+          <!--</div>-->
+          <!--{% empty %}-->
+		    <!--暂无评论！-->
+  	  <!--{% endfor %}-->
+        <!--</div>-->
+        <!--<hr>-->
+     {% for comment in comment_list %}
+        <hr>
+        <div class="am-g blog-author blog-article-margin">
+          <div class="am-u-sm-3 am-u-md-3 am-u-lg-2">
+            <img src="{% static '/blog/i/f15.jpg' %}" alt="" class="blog-author-img am-circle">
+          </div>
+          <div class="am-u-sm-9 am-u-md-9 am-u-lg-10">
+          <h3><span>评论信息： &nbsp;&nbsp;</span><span class="blog-color">{{ comment.name }}({{ comment.create_time }})</span></h3>
+            <p>{{comment.text}}</p>
+          </div>
+
+        </div>
+
+        <hr>
+        {% empty %}
+		    暂无评论！
+        {% endfor %}
+        <!--<ul class="am-pagination blog-article-margin">-->
+          <!--<li class="am-pagination-prev"><a href="#" class="">&laquo; 一切的回顾</a></li>-->
+          <!--<li class="am-pagination-next"><a href="">不远的未来 &raquo;</a></li>-->
+        <!--</ul>-->
+
+        <hr>
+
+        <form class="am-form am-g" id="comment-form" name="comment-form" action="{% url 'comments:article_comment' article.pk %}" method="POST">
+          {% csrf_token %}
+            <h3 class="blog-comment">评论</h3>
+          <fieldset>
+            <div class="am-form-group am-u-sm-4 blog-clear-left">
+				 {{ form.name }}
+				 {{ form.name.errors }}
+            </div>
+            <div class="am-form-group am-u-sm-4">
+                 {{form.email}}
+				 {{ form.email.errors }}
+            </div>
+            <div class="am-form-group">
+                    {{form.text}}
+					{{form.text.errors}}
+            </div>
+            <p><button type="submit" class="am-btn am-btn-default">发表评论</button></p>
+          </fieldset>
+
+        </form>
+
+        <hr>
+    </div>
+{% endblock main %}
